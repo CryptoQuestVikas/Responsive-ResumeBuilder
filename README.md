@@ -1,7 +1,7 @@
 # Responsive-ResumeBuilder
 
 > This is a simple ResumeBuilder Website.
-> If you want to **add more features or modify** according to you..
+> If you want to ``**add more features or modify**`` according to you..
 
 # **Languages:**
 > HTML CSS JAVASCRIPT PHP ``I'm using internal css and javascript so remember this.``

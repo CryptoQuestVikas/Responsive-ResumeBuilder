@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Builder by vikas lahare</title>
+    <style>
+    * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+header {
+    background-color: #2c3e50;
+    color: #ecf0f1;
+    text-align: center;
+    padding: 1rem;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 2rem auto;
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1, h2 {
+    margin-bottom: 1rem;
+}
+
+section {
+    margin-bottom: 2rem;
+}
+
+input, textarea {
+    width: 100%;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+}
+
+textarea {
+    height: 100px;
+    resize: vertical;
+}
+
+button {
+    background-color: #3498db;
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #2980b9;
+}
+
+.experience-item, .education-item {
+    border: 1px solid #ddd;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 3px;
+}
+
+#resumePreview {
+    margin-top: 2rem;
+    padding: 2rem;
+    background-color: #ecf0f1;
+    border-radius: 5px;
+}
+
+.hidden {
+    display: none;
+}
+
+@media screen and (max-width: 768px) {
+    .container {
+        width: 95%;
+        padding: 1rem;
+    }
+}
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Resume Builder by vikas lahare</h1>
+    </header>
+    <main>
+        <div class="container">
+            <form id="resumeForm">
+                <section>
+                    <h2>Personal Information</h2>
+                    <input type="text" id="name" placeholder="Full Name" required>
+                    <input type="email" id="email" placeholder="Email" required>
+                    <input type="tel" id="phone" placeholder="Phone Number">
+                    <textarea id="summary" placeholder="Professional Summary"></textarea>
+                </section>
+
+                <section>
+                    <h2>Work Experience</h2>
+                    <div id="workExperience">
+                        <div class="experience-item">
+                            <input type="text" placeholder="Job Title">
+                            <input type="text" placeholder="Company">
+                            <input type="text" placeholder="Date Range">
+                            <textarea placeholder="Job Description"></textarea>
+                        </div>
+                    </div>
+                    <button type="button" id="addExperience">Add Experience</button>
+                </section>
+
+                <section>
+                    <h2>Education</h2>
+                    <div id="education">
+                        <div class="education-item">
+                            <input type="text" placeholder="Degree">
+                            <input type="text" placeholder="Institution">
+                            <input type="text" placeholder="Graduation Year">
+                        </div>
+                    </div>
+                    <button type="button" id="addEducation">Add Education</button>
+                </section>
+
+                <section>
+                    <h2>Skills</h2>
+                    <textarea id="skills" placeholder="Enter your skills (comma-separated)"></textarea>
+                </section>
+
+                <button type="submit">Generate Resume</button>
+            </form>
+
+            <div id="resumePreview" class="hidden">
+                <h2>Resume Preview</h2>
+                <div id="previewContent"></div>
+                <button id="downloadResume">Download Resume</button>
+            </div>
+        </div>
+    </main>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('resumeForm');
+    const addExperienceBtn = document.getElementById('addExperience');
+    const addEducationBtn = document.getElementById('addEducation');
+    const previewContent = document.getElementById('previewContent');
+    const resumePreview = document.getElementById('resumePreview');
+    const downloadBtn = document.getElementById('downloadResume');
+
+    addExperienceBtn.addEventListener('click', function() {
+        const experienceItem = document.createElement('div');
+        experienceItem.className = 'experience-item';
+        experienceItem.innerHTML = `
+            <input type="text" placeholder="Job Title">
+            <input type="text" placeholder="Company">
+            <input type="text" placeholder="Date Range">
+            <textarea placeholder="Job Description"></textarea>
+        `;
+        document.getElementById('workExperience').appendChild(experienceItem);
+    });
+
+    addEducationBtn.addEventListener('click', function() {
+        const educationItem = document.createElement('div');
+        educationItem.className = 'education-item';
+        educationItem.innerHTML = `
+            <input type="text" placeholder="Degree">
+            <input type="text" placeholder="Institution">
+            <input type="text" placeholder="Graduation Year">
+        `;
+        document.getElementById('education').appendChild(educationItem);
+    });
+
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        generateResume();
+    });
+
+    function generateResume() {
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('email').value;
+        const phone = document.getElementById('phone').value;
+        const summary = document.getElementById('summary').value;
+        const skills = document.getElementById('skills').value;
+
+        let resumeHTML = `
+            <h2>${name}</h2>
+            <p>Email: ${email} | Phone: ${phone}</p>
+            <h3>Professional Summary</h3>
+            <p>${summary}</p>
+            <h3>Work Experience</h3>
+        `;
+
+        const experienceItems = document.querySelectorAll('.experience-item');
+        experienceItems.forEach(item => {
+            const inputs = item.querySelectorAll('input');
+            const textarea = item.querySelector('textarea');
+            resumeHTML += `
+                <h4>${inputs[0].value} at ${inputs[1].value}</h4>
+                <p>${inputs[2].value}</p>
+                <p>${textarea.value}</p>
+            `;
+        });
+
+        resumeHTML += '<h3>Education</h3>';
+        const educationItems = document.querySelectorAll('.education-item');
+        educationItems.forEach(item => {
+            const inputs = item.querySelectorAll('input');
+            resumeHTML += `
+                <p>${inputs[0].value} - ${inputs[1].value}, ${inputs[2].value}</p>
+            `;
+        });
+
+        resumeHTML += `
+            <h3>Skills</h3>
+            <p>${skills}</p>
+        `;
+
+        previewContent.innerHTML = resumeHTML;
+        resumePreview.classList.remove('hidden');
+    }
+
+    downloadBtn.addEventListener('click', function() {
+        const resumeContent = previewContent.innerHTML;
+        const blob = new Blob([resumeContent], { type: 'text/html' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'resume.html';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    });
+});
+    </script>
+</body>
+</html>
